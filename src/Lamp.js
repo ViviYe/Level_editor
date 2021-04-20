@@ -2,8 +2,8 @@ import React, { useRef, useEffect, useCallback, useState} from "react";
 import { Circle as KonvaCircle, Transformer, Image } from "react-konva";
 
 import { LIMITS } from "./constants";
-import { selectShape, transformCircleShape, moveShape } from "./state";
-import Enemy_asset from './assets/enemy.png'
+import { selectShape, transformRectangleShape, moveShape } from "./state";
+import Lamp_asset from './assets/lamp.png'
 
 const boundBoxCallbackForCircle = (oldBox, newBox) => {
   // limit resize
@@ -18,7 +18,7 @@ const boundBoxCallbackForCircle = (oldBox, newBox) => {
   return newBox;
 };
 
-export function Enemy({ id, isSelected, type, ...shapeProps }) {
+export function Lamp({ id, isSelected, type, ...shapeProps }) {
   const shapeRef = useRef();
   const transformerRef = useRef();
   const [image, setImage] = useState(new window.Image());
@@ -33,7 +33,7 @@ export function Enemy({ id, isSelected, type, ...shapeProps }) {
 
   useEffect(() => {
     const img = new window.Image();
-    img.src = Enemy_asset
+    img.src = Lamp_asset
     setImage(img);
   }, []);
 
@@ -55,7 +55,7 @@ export function Enemy({ id, isSelected, type, ...shapeProps }) {
 
   const handleTransform = useCallback(
     (event) => {
-      transformCircleShape(shapeRef.current, id, event);
+      transformRectangleShape(shapeRef.current, id, event);
     },
     [id]
   );
@@ -85,7 +85,6 @@ export function Enemy({ id, isSelected, type, ...shapeProps }) {
           anchorSize={5}
           borderDash={[6, 2]}
           ref={transformerRef}
-          rotateEnabled={false}
           enabledAnchors={[
             "top-left",
             "top-right",

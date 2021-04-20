@@ -63,14 +63,21 @@ export function Shape4({ id, isSelected, type, ...shapeProps }) {
     <>
       <Image
        image={image}
-        onClick={handleSelect}
-        onTap={handleSelect}
-        onDragStart={handleSelect}
-        ref={shapeRef}
-        {...shapeProps}
-        draggable
-        onDragEnd={handleDrag}
-        onTransformEnd={handleTransform}
+       onClick={handleSelect}
+       onTap={handleSelect}
+       onDragStart={handleSelect}
+       ref={shapeRef}
+       // {...shapeProps}
+       x={shapeProps.x * 40}
+       y={1000 - shapeProps.y* 40}
+       rotation={shapeProps.rotation}
+       width={shapeProps.width}
+       offsetX = {shapeProps.width/2}
+       offsetY ={shapeProps.height/2}
+       height ={shapeProps.height}
+       draggable
+       onDragEnd={handleDrag}
+       onTransformEnd={handleTransform}
       />
       {isSelected && (
         <Transformer

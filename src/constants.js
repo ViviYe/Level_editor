@@ -1,7 +1,9 @@
 export const SHAPE_TYPES = {
   RECT: "rect",
-  CIRCLE: "circle",
   LUMIA: "lumia",
+  ENEMY: "enemy",
+  ENERGY:"energy",
+  LAMP:"lamp",
   Shape1: "shape1",
   Shape2: "shape2",
   Shape3: "shape3",

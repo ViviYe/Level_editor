@@ -3,6 +3,7 @@ import produce from "immer";
 import clamp from "clamp";
 import { nanoid } from "nanoid";
 
+
 import { SHAPE_TYPES, DEFAULTS, LIMITS } from "./constants";
 
 const APP_NAMESPACE = "__integrtr_diagrams__";
@@ -24,21 +25,107 @@ export const saveDiagram = () => {
 
   var json_obj = {
       level:{
+        xBound: 30,
+        yBound: 20,
         lumia:{},
         energies:[],
         platforms:[],
-        tiles:[]
+        plants:[],
+        tiles:[],
+        enemies:[],
+        buttondoors: []
       }
   }
   for (const [_, value] of Object.entries(state.shapes)) {
-     
-      var new_obj = {
-        "file": value['type'],
-        "angle": value['rotation'],
-        "x": value['x']/40,
-        "y": (window.innerHeight - value['y'])/40
-      }
-      json_obj['level']['tiles'].push(new_obj)
+
+    if (value['x'].toFixed(2) > json_obj['level']['xBound']){
+      json_obj['level']['xBound'] = value['x'].toFixed(2)
+    }
+    if (value['y'].toFixed(2) > json_obj['level']['yBound']){
+      json_obj['level']['xBound'] = value['y'].toFixed(2)
+    }
+    switch(value['type']) {
+      case SHAPE_TYPES.Shape1:
+        var new_obj = {
+          "type": 1,
+          "texture": value["texture"],
+          "angle": -1.0 * value['rotation']/180.0 * 3.14,
+          "posx": 1.0 * value['x'].toFixed(2),
+          "posy": 1.0 * value['y'].toFixed(2),
+        }
+        json_obj['level']['tiles'].push(new_obj)
+        break;
+
+      case SHAPE_TYPES.Shape2:
+        var new_obj = {
+          "type": 3,
+          "texture": value["texture"],
+          "angle": -1.0 * value['rotation'].toFixed(2)/180.0 * 3.14,
+          "posx": 1.0 * value['x'].toFixed(2),
+          "posy": 1.0 * value['y'].toFixed(2),
+        }
+        json_obj['level']['tiles'].push(new_obj)
+        break;
+
+      case SHAPE_TYPES.Shape3:
+          var new_obj = {
+            "type": 2,
+            "texture": "tile4",
+            "angle": -3.14 * value['rotation']/180.0,
+            "posx": 1.0 * value['x'].toFixed(2),
+            "posy": 1.0 * value['y'].toFixed(2),
+          }
+          json_obj['level']['tiles'].push(new_obj)
+          break;
+
+      case SHAPE_TYPES.Shape4:
+            var new_obj = {
+              "type": 4,
+              "texture": "tile6",
+              "angle": -1.0 * value['rotation']/180.0 * 3.14,
+              "posx": 1.0 * value['x'].toFixed(2),
+              "posy": 1.0 * value['y'].toFixed(2),
+            }
+            json_obj['level']['tiles'].push(new_obj)
+            break;
+
+      case SHAPE_TYPES.LUMIA:
+            var new_obj = {
+              "sizelevel": 2,
+              "posx": 1.0 * value['x'].toFixed(2),
+              "posy": 1.0 * value['y'].toFixed(2),
+            }
+            json_obj['level']['lumia'] = new_obj   
+            break;
+
+      case SHAPE_TYPES.ENEMY:
+            var new_obj = {
+              "sizelevel": 1,
+              "posx": 1.0 * value['x'].toFixed(2),
+              "posy": 1.0 * value['y'].toFixed(2),
+            }
+            json_obj['level']['enemies'].push(new_obj)
+            break;
+
+      case SHAPE_TYPES.LAMP:
+              var new_obj = {
+                "angle": -1.0 * value['rotation']/180.0 * 3.14,
+                "posx": 1.0 * value['x'].toFixed(2),
+                "posy": 1.0 * value['y'].toFixed(2),
+              }
+              json_obj['level']['plants'].push(new_obj)
+              break;
+
+      case SHAPE_TYPES.ENERGY:
+                var new_obj = {
+                  "posx": 1.0 * value['x'].toFixed(2),
+                  "posy": 1.0 * value['y'].toFixed(2),
+                }
+                json_obj['level']['energies'].push(new_obj)
+                break;
+      default:
+          var new_obj = {}
+    }
   }
 
 
@@ -81,9 +168,10 @@ export const createShape1 = ({ x, y }) => {
           type: SHAPE_TYPES.Shape1,
           width: 120,
           height: 120,
-          rotation: DEFAULTS.RECT.ROTATION,
+          rotation: 0,
           x,
-          y,
+          y: y,
+          texture: "tile1",
         };
       });
   };
@@ -97,6 +185,7 @@ export const createShape1 = ({ x, y }) => {
           rotation: DEFAULTS.RECT.ROTATION,
           x,
           y,
+          texture: "tile3",
         };
       });
   };
@@ -129,17 +218,55 @@ export const createShape1 = ({ x, y }) => {
   
   
 
-export const createCircle = ({ x, y }) => {
+export const createLumia = ({ x, y }) => {
   setState((state) => {
     state.shapes[nanoid()] = {
-      type: SHAPE_TYPES.CIRCLE,
-      width: 100,
-      height: 100,
+      type: SHAPE_TYPES.LUMIA,
+      width: 80,
+      height: 80,
       x,
       y,
     };
   });
 };
+
+export const createEnemy = ({ x, y }) => {
+  setState((state) => {
+    state.shapes[nanoid()] = {
+      type: SHAPE_TYPES.ENEMY,
+      width: 80,
+      height: 80,
+      x,
+      y,
+    };
+  });
+};
+
+export const createEnergy = ({ x, y }) => {
+  setState((state) => {
+    state.shapes[nanoid()] = {
+      type: SHAPE_TYPES.ENERGY,
+      width: 40,
+      height: 40,
+      x,
+      y,
+    };
+  });
+};
+
+export const createLamp = ({ x, y }) => {
+  setState((state) => {
+    state.shapes[nanoid()] = {
+      type: SHAPE_TYPES.LAMP,
+      width: 40,
+      height: 40,
+      x,
+      y,
+      rotation: 0
+    };
+  });
+};
+
 
 export const selectShape = (id) => {
   setState((state) => {
@@ -158,8 +285,8 @@ export const moveShape = (id, event) => {
     const shape = state.shapes[id];
 
     if (shape) {
-      shape.x = event.target.x();
-      shape.y = event.target.y();
+      shape.x = event.target.x()/40;
+      shape.y = (1000 - event.target.y())/40;
     }
   });
 };
@@ -169,7 +296,7 @@ export const updateAttribute = (attr, value) => {
     const shape = state.shapes[state.selected];
 
     if (shape) {
-      shape[attr] = value;
+          shape[attr] = value;   
     }
   });
 };
@@ -190,24 +317,11 @@ export const transformRectangleShape = (node, id, event) => {
     const shape = state.shapes[id];
 
     if (shape) {
-      shape.x = node.x();
-      shape.y = node.y();
-
       shape.rotation = node.rotation();
+      shape.x = node.x()/40;
+      shape.y = (1000 - node.y())/40;
 
-      shape.width = clamp(
-        // increase the width in order of the scale
-        node.width() * scaleX,
-        // should not be less than the minimum width
-        LIMITS.RECT.MIN,
-        // should not be more than the maximum width
-        LIMITS.RECT.MAX
-      );
-      shape.height = clamp(
-        node.height() * scaleY,
-        LIMITS.RECT.MIN,
-        LIMITS.RECT.MAX
-      );
+
     }
   });
 };
@@ -229,12 +343,6 @@ export const transformCircleShape = (node, id, event) => {
     if (shape) {
       shape.x = node.x();
       shape.y = node.y();
-
-      shape.radius = clamp(
-        (node.width() * scaleX) / 2,
-        LIMITS.CIRCLE.MIN,
-        LIMITS.CIRCLE.MAX
-      );
     }
   });
 };

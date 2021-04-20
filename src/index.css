@@ -53,7 +53,7 @@ aside {
   margin-top: 5%;
   overflow: auto;
   width: 90%;
-  height: 80%;
+  height: 60%;
   border: solid 3px lavender;
 }
 
@@ -79,6 +79,7 @@ aside {
 .value {
   color: darkslategray;
   font-weight: bolder;
+  width: 50%;
 }
 
 .no-data {

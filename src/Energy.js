@@ -3,7 +3,7 @@ import { Circle as KonvaCircle, Transformer, Image } from "react-konva";
 
 import { LIMITS } from "./constants";
 import { selectShape, transformCircleShape, moveShape } from "./state";
-import Enemy_asset from './assets/enemy.png'
+import Energy_asset from './assets/energy.png'
 
 const boundBoxCallbackForCircle = (oldBox, newBox) => {
   // limit resize
@@ -18,7 +18,7 @@ const boundBoxCallbackForCircle = (oldBox, newBox) => {
   return newBox;
 };
 
-export function Enemy({ id, isSelected, type, ...shapeProps }) {
+export function Energy({ id, isSelected, type, ...shapeProps }) {
   const shapeRef = useRef();
   const transformerRef = useRef();
   const [image, setImage] = useState(new window.Image());
@@ -33,7 +33,7 @@ export function Enemy({ id, isSelected, type, ...shapeProps }) {
 
   useEffect(() => {
     const img = new window.Image();
-    img.src = Enemy_asset
+    img.src = Energy_asset
     setImage(img);
   }, []);
 

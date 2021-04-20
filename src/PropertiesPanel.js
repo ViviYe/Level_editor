@@ -9,6 +9,7 @@ import Shape3 from './assets/tile4.png'
 import Shape4 from './assets/tile6.png'
 
 import { useShapes, updateAttribute } from "./state";
+import { SHAPE_TYPES } from "./constants";
 
 const shapeSelector = (state) => state.shapes[state.selected];
 
@@ -17,13 +18,35 @@ const options_shape1 = [
         { value: "tile1", label: <img src={Shape11} height="60px" width="60px"/> },
         { value: 'tile2', label: <img src={Shape12} height="60px" width="60px"/>  },
       ]
-  const selectedShape = useShapes(shapeSelector);
+const options_shape2 = [
+        { value: "tile3", label: <img src={Shape21} height="10px" width="60px"/> },
+        { value: 'tile5', label: <img src={Shape22} height="10px" width="60px"/>  },
+        { value: 'tile7', label: <img src={Shape23} height="10px" width="60px"/>  },
+      ]
+const selectedShape = useShapes(shapeSelector);
 
-  const updateAttr = useCallback((event) => {
+const updateAttr = useCallback((event) => {
     const attr = event.target.name;
+    updateAttribute(attr, parseInt(event.target.value));
 
-    updateAttribute(attr, event.target.value);
+  
   }, []);
+
+  const updateTexture = useCallback((option) => {
+    console.log("here")
+    updateAttribute("texture", option.value);
+  
+  }, []);
+
+  const getTextureOptions = (type) => {
+    switch(type){
+      case("shape1"):
+      return options_shape1
+      case("shape2"):
+      return options_shape2
+      default: return []
+    }
+  }
 
   return (
     <aside className="panel">
@@ -36,16 +59,49 @@ const options_shape1 = [
             </div>
 
             <div className="key">
-              Texture{" "}
-              {/* <input
+              x{"  "}
+              <input
                 className="value"
-                name="Texture"
-                type="color"
-                value={selectedShape.fill}
-                onChange={updateAttr} */}
+                name="x"
+                type="text"
+                value={selectedShape.x}
+                onChange={(event) => updateAttr(event, selectedShape.type)}
+                />
               
             </div>
-            <Select options={options_shape1} />
+
+            <div className="key">
+              y{"  "}
+              <input
+                className="value"
+                name="y"
+                type="text"
+                value={selectedShape.y}
+                onChange={updateAttr}
+                />
+              
+            </div>
+
+            <div className="key">
+              angle{"  "}
+              <input
+                className="value"
+                name="rotation"
+                type="text"
+                value={selectedShape.rotation}
+                onChange={updateAttr}
+                />
+              
+            </div>
+
+            <div className="key">
+              Texture{" "}
+            </div>
+            <Select options={
+              getTextureOptions(selectedShape.type)
+            } 
+            onChange={updateTexture}
+            />
           </>
         ) : (
           <div className="no-data">Nothing is selected</div>

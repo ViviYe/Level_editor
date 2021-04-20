@@ -12,7 +12,6 @@ import { DRAG_DATA_KEY, SHAPE_TYPES } from "./constants";
 
 const handleDragStart = (event) => {
   const type = event.target.dataset.shape;
-  console.log(type);
   if (type) {
     // x,y coordinates of the mouse pointer relative to the position of the padding edge of the target node
     const offsetX = event.nativeEvent.offsetX;
@@ -70,7 +69,7 @@ export function Palette() {
       <img
        src={Lumia} 
         className="shape"
-        data-shape={SHAPE_TYPES.CIRCLE}
+        data-shape={SHAPE_TYPES.LUMIA}
         draggable
         onDragStart={handleDragStart}
       />
@@ -78,7 +77,7 @@ export function Palette() {
       <img
        src={Enemy} 
         className="shape"
-        data-shape={SHAPE_TYPES.CIRCLE}
+        data-shape={SHAPE_TYPES.ENEMY}
         draggable
         onDragStart={handleDragStart}
       />
@@ -86,7 +85,7 @@ export function Palette() {
       <img
        src={Energy} 
         className="shape"
-        data-shape={SHAPE_TYPES.CIRCLE}
+        data-shape={SHAPE_TYPES.ENERGY}
         draggable
         onDragStart={handleDragStart}
       />
@@ -94,7 +93,7 @@ export function Palette() {
       <img
        src={Lamp} 
         className="shape"
-        data-shape={SHAPE_TYPES.CIRCLE}
+        data-shape={SHAPE_TYPES.LAMP}
         draggable
         onDragStart={handleDragStart}
       />

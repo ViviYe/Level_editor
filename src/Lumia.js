@@ -68,7 +68,14 @@ export function Lumia({ id, isSelected, type, ...shapeProps }) {
         onTap={handleSelect}
         onDragStart={handleSelect}
         ref={shapeRef}
-        {...shapeProps}
+        // {...shapeProps}
+        x={shapeProps.x * 40}
+        y={1000 - shapeProps.y* 40}
+        rotation={shapeProps.rotation}
+        width={shapeProps.width}
+        offsetX = {shapeProps.width/2}
+        offsetY ={shapeProps.height/2}
+        height ={shapeProps.height}
         draggable
         onDragEnd={handleDrag}
         onTransformEnd={handleTransform}

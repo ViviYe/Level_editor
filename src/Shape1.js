@@ -22,7 +22,12 @@ const boundBoxCallbackForRectangle = (oldBox, newBox) => {
 export function Shape1({ id, isSelected, type, ...shapeProps }) {
   const shapeRef = useRef();
   const transformerRef = useRef();
-  const [image, setImage] = useState(new window.Image());
+  const img1 = new window.Image()
+  img1.src = Shape11
+  const img2 = new window.Image()
+  img2.src = Shape12
+  const [image, setImage] = useState(img1);
+
 
   useEffect(() => {
     if (isSelected) {
@@ -59,16 +64,32 @@ export function Shape1({ id, isSelected, type, ...shapeProps }) {
     },
     [id]
   );
+  
+  const getImage = (texture) => {
+    switch(texture){
+      case ("tile1"):
+        return img1
+      case ("tile2"):
+        return img2
+      default: return img1
+    }
+  }
 
   return (
     <>
       <Image
-       image={image}
+       image={getImage(shapeProps.texture)}
         onClick={handleSelect}
         onTap={handleSelect}
         onDragStart={handleSelect}
         ref={shapeRef}
-        {...shapeProps}
+        x={shapeProps.x * 40}
+        y={1000 - shapeProps.y* 40}
+        rotation={shapeProps.rotation}
+        width={shapeProps.width}
+        offsetX = {shapeProps.width/2}
+        offsetY ={shapeProps.height/2}
+        height ={shapeProps.height}
         draggable
         onDragEnd={handleDrag}
         onTransformEnd={handleTransform}
