@@ -9,6 +9,7 @@ import {
   createShape2,
   createShape3,
   createShape4,
+  createShape5,
   saveDiagram,
   reset,
   createLumia,
@@ -97,12 +98,19 @@ export function Canvas() {
         case(SHAPE_TYPES.Shape3):
           createShape3({
             x: (coords.x - (offsetX-60))/40,
-            y: (1000 -(coords.y - (offsetY-60)))/40,
+            y: (1000 -(coords.y - (offsetY-10)))/40,
           });
           break;
 
         case(SHAPE_TYPES.Shape4):
           createShape4({
+            x: (coords.x - (offsetX-10))/40,
+            y: (1000 -(coords.y - (offsetY-10)))/40,
+          });
+          break;
+
+          case(SHAPE_TYPES.Shape5):
+          createShape5({
             x: (coords.x - (offsetX-60))/40,
             y: (1000 -(coords.y - (offsetY-60)))/40,
           });

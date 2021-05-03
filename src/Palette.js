@@ -3,6 +3,7 @@ import Shape1 from './assets/tile1.png'
 import Shape2 from './assets/tile3.png'
 import Shape3 from './assets/tile4.png'
 import Shape4 from './assets/tile6.png'
+import Shape5 from './assets/tile8.png'
 import Lumia from './assets/lumia.png'
 import Lamp from './assets/lamp.png'
 import Energy from './assets/energy.png'
@@ -65,6 +66,13 @@ export function Palette() {
         draggable
         onDragStart={handleDragStart}
       />
+      <img
+       src={Shape5} 
+        className="shape"
+        data-shape={SHAPE_TYPES.Shape5}
+        draggable
+        onDragStart={handleDragStart}
+      />
      <h2>Lumia</h2>
       <img
        src={Lumia} 
@@ -97,6 +105,7 @@ export function Palette() {
         draggable
         onDragStart={handleDragStart}
       />
+
     </aside>
   );
 }

@@ -11,6 +11,7 @@ import { Shape1 } from "./Shape1";
 import { Shape2 } from "./Shape2";
 import { Shape3 } from "./Shape3";
 import { Shape4 } from "./Shape4";
+import { Shape5 } from "./Shape5";
 
 export function Shape({ shape }) {
   const isSelectedSelector = useCallback(
@@ -37,6 +38,8 @@ export function Shape({ shape }) {
     return <Energy {...shape} isSelected={isSelected} />
   }else if (shape.type === SHAPE_TYPES.LAMP) {
     return <Lamp {...shape} isSelected={isSelected} />
+  }else if (shape.type === SHAPE_TYPES.Shape5) {
+    return <Shape5 {...shape} isSelected={isSelected} />
   }
 
   return null;

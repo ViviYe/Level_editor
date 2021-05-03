@@ -8,6 +8,7 @@ export const SHAPE_TYPES = {
   Shape2: "shape2",
   Shape3: "shape3",
   Shape4: "shape4",
+  Shape5: "shape5",
 };
 
 export const DEFAULTS = {

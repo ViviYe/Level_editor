@@ -89,6 +89,19 @@ export const saveDiagram = () => {
             json_obj['level']['tiles'].push(new_obj)
             break;
 
+
+      case SHAPE_TYPES.Shape5:
+              var new_obj = {
+                "type": 5,
+                "texture": "tile8",
+                "angle": -1.0 * value['rotation']/180.0 * 3.14,
+                "posx": 1.0 * value['x'].toFixed(2),
+                "posy": 1.0 * value['y'].toFixed(2),
+              }
+              json_obj['level']['tiles'].push(new_obj)
+              break;
+  
+
       case SHAPE_TYPES.LUMIA:
             var new_obj = {
               "sizelevel": 2,
@@ -210,6 +223,19 @@ export const createShape1 = ({ x, y }) => {
           width: 140,
           height: 140,
           rotation: DEFAULTS.RECT.ROTATION,
+          x,
+          y,
+        };
+      });
+  };
+
+  export const createShape5 = ({ x, y }) => {
+    setState((state) => {
+        state.shapes[nanoid()] = {
+          type: SHAPE_TYPES.Shape5,
+          width: 20,
+          height: 20,
+          rotation: 0,
           x,
           y,
         };
