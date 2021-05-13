@@ -317,6 +317,15 @@ export const moveShape = (id, event) => {
   });
 };
 
+export const deleteShape = () => {
+  setState((state) => {
+
+    if (state.selected) {
+      delete state.shapes[state.selected]
+    }
+  });
+};
+
 export const updateAttribute = (attr, value) => {
   setState((state) => {
     const shape = state.shapes[state.selected];

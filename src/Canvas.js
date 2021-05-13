@@ -16,6 +16,7 @@ import {
   createEnemy,
   createEnergy,
   createLamp,
+  deleteShape
 } from "./state";
 import { DRAG_DATA_KEY, SHAPE_TYPES } from "./constants";
 import { Shape } from "./Shape";
@@ -146,6 +147,7 @@ export function Canvas() {
       <div className="buttons">
         <button onClick={saveDiagram}>Download</button>
         <button onClick={reset}>Reset</button>
+        <button onClick={deleteShape}>delete</button>
       </div>
       <Stage
         className="container"
