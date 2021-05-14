@@ -12,6 +12,7 @@ import { Shape2 } from "./Shape2";
 import { Shape3 } from "./Shape3";
 import { Shape4 } from "./Shape4";
 import { Shape5 } from "./Shape5";
+import { StickyWall } from "./StickyWall";
 
 export function Shape({ shape }) {
   const isSelectedSelector = useCallback(
@@ -40,6 +41,8 @@ export function Shape({ shape }) {
     return <Lamp {...shape} isSelected={isSelected} />
   }else if (shape.type === SHAPE_TYPES.Shape5) {
     return <Shape5 {...shape} isSelected={isSelected} />
+  }else if (shape.type === SHAPE_TYPES.Sticky) {
+    return <StickyWall {...shape} isSelected={isSelected} />
   }
 
   return null;

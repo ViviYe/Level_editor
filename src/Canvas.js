@@ -1,4 +1,4 @@
-import React, { useRef, useCallback } from "react";
+import React, { useRef, useCallback, useState } from "react";
 import { Layer, Stage, Rect } from "react-konva";
 
 import {
@@ -10,13 +10,15 @@ import {
   createShape3,
   createShape4,
   createShape5,
+  createSticky,
   saveDiagram,
   reset,
   createLumia,
   createEnemy,
   createEnergy,
   createLamp,
-  deleteShape
+  deleteShape,
+  addTiles
 } from "./state";
 import { DRAG_DATA_KEY, SHAPE_TYPES } from "./constants";
 import { Shape } from "./Shape";
@@ -29,6 +31,25 @@ const handleDragOver = (event) => event.preventDefault();
 
 export function Canvas() {
   const shapes = useShapes((state) => Object.entries(state.shapes));
+
+  const onFileChange = (event) => {
+    const fileReader = new FileReader();
+    fileReader.readAsText(event.target.files[0], "UTF-8");
+    fileReader.onload = e => {
+      // console.log("e.target.result", JSON.parse(e.target.result));
+      // setfile(JSON.parse(e.target.result));
+      addTiles(JSON.parse(e.target.result))
+    }
+    
+    
+  }
+  // const onUpload = event => { 
+  //   const fileReader = new FileReader();
+  //   fileReader.readAsText(file, "UTF-8");
+  //   fileReader.onload = e => {
+
+  //   }
+  // }
 
   const stageRef = useRef();
 
@@ -117,6 +138,13 @@ export function Canvas() {
           });
           break;
 
+          case(SHAPE_TYPES.Sticky):
+          createSticky({
+            x: (coords.x - (offsetX-10))/40,
+            y: (1000 -(coords.y - (offsetY-25)))/40,
+          });
+          break;
+
       }
      
     }
@@ -148,6 +176,7 @@ export function Canvas() {
         <button onClick={saveDiagram}>Download</button>
         <button onClick={reset}>Reset</button>
         <button onClick={deleteShape}>delete</button>
+        <input type="file" onChange={onFileChange} />
       </div>
       <Stage
         className="container"

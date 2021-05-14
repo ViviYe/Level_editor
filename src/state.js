@@ -20,20 +20,26 @@ export const useShapes = createStore(() => {
 });
 const setState = (fn) => useShapes.set(produce(fn));
 
+
 export const saveDiagram = () => {
   const state = useShapes.get();
 
   var json_obj = {
       level:{
-        xBound: 30,
-        yBound: 20,
+        xBound: 0,
+        yBound: 0,
         lumia:{},
         energies:[],
         platforms:[],
         plants:[],
         tiles:[],
         enemies:[],
-        buttondoors: []
+        buttondoors: [],
+        twostars: 1000, 
+        threestars: 2000, 
+        spikes:[], 
+        sticky_walls:[], 
+        tutorials:[]
       }
   }
   for (const [_, value] of Object.entries(state.shapes)) {
@@ -42,7 +48,7 @@ export const saveDiagram = () => {
       json_obj['level']['xBound'] = value['x'].toFixed(2)
     }
     if (value['y'].toFixed(2) > json_obj['level']['yBound']){
-      json_obj['level']['xBound'] = value['y'].toFixed(2)
+      json_obj['level']['yBound'] = value['y'].toFixed(2)
     }
     switch(value['type']) {
       case SHAPE_TYPES.Shape1:
@@ -175,30 +181,30 @@ export const createRectangle = ({ x, y }) => {
   });
 };
 
-export const createShape1 = ({ x, y }) => {
+export const createShape1 = ({ x, y, file="tile1", rotation=0}) => {
     setState((state) => {
         state.shapes[nanoid()] = {
           type: SHAPE_TYPES.Shape1,
           width: 120,
           height: 120,
-          rotation: 0,
+          rotation: rotation,
           x,
           y: y,
-          texture: "tile1",
+          texture: file,
         };
       });
   };
 
-  export const createShape2 = ({ x, y }) => {
+  export const createShape2 = ({ x, y, file="tile3", rotation=0 }) => {
     setState((state) => {
         state.shapes[nanoid()] = {
           type: SHAPE_TYPES.Shape2,
           width: 120,
           height: 20,
-          rotation: DEFAULTS.RECT.ROTATION,
+          rotation: rotation,
           x,
           y,
-          texture: "tile3",
+          texture: file,
         };
       });
   };
@@ -242,6 +248,18 @@ export const createShape1 = ({ x, y }) => {
       });
   };
   
+  export const createSticky = ({ x, y }) => {
+    setState((state) => {
+        state.shapes[nanoid()] = {
+          type: SHAPE_TYPES.Sticky,
+          width: 20,
+          height: 50,
+          rotation: 0,
+          x,
+          y,
+        };
+      });
+  };
   
 
 export const createLumia = ({ x, y }) => {
@@ -336,6 +354,28 @@ export const updateAttribute = (attr, value) => {
   });
 };
 
+export const addTiles = (json) =>{
+  const tiles = json['level']['tiles']
+  // console.log(tiles)
+  tiles.forEach(element => {
+    switch(element['type']){
+      case 1:
+            createShape1({x: element['posx'], y: element['posy'], file: element['texture'], rotation: (element['angle'] * -180)/3.14})
+        break
+            break
+      case 3:
+            createShape2({x: element['posx'], y: element['posy'], file: element['texture'], rotation: (element['angle'] * -180)/3.14})
+            break
+      case 2:
+            break
+      case 4:
+            break
+      case 5:
+            break
+    }
+  });
+}
+
 export const transformRectangleShape = (node, id, event) => {
   // transformer is changing scale of the node
   // and NOT its width or height
@@ -355,7 +395,6 @@ export const transformRectangleShape = (node, id, event) => {
       shape.rotation = node.rotation();
       shape.x = node.x()/40;
       shape.y = (1000 - node.y())/40;
-
 
     }
   });

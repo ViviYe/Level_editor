@@ -8,6 +8,7 @@ import Lumia from './assets/lumia.png'
 import Lamp from './assets/lamp.png'
 import Energy from './assets/energy.png'
 import Enemy from './assets/enemy.png'
+import Sticky from './assets/sticky.png'
 
 import { DRAG_DATA_KEY, SHAPE_TYPES } from "./constants";
 
@@ -70,6 +71,13 @@ export function Palette() {
        src={Shape5} 
         className="shape"
         data-shape={SHAPE_TYPES.Shape5}
+        draggable
+        onDragStart={handleDragStart}
+      />
+       <img
+       src={Sticky} 
+        className="sticky"
+        data-shape={SHAPE_TYPES.Sticky}
         draggable
         onDragStart={handleDragStart}
       />

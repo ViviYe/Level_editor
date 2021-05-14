@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState} from "react";
 import Select from 'react-select'
 import Shape11 from './assets/tile1.png'
 import Shape12 from './assets/tile2.png'
@@ -14,6 +14,10 @@ import { SHAPE_TYPES } from "./constants";
 const shapeSelector = (state) => state.shapes[state.selected];
 
 export function PropertiesPanel() {
+
+const [attr, setAttr] = useState("")
+const [value, setValue] = useState(0)
+
 const options_shape1 = [
         { value: "tile1", label: <img src={Shape11} height="60px" width="60px"/> },
         { value: 'tile2', label: <img src={Shape12} height="60px" width="60px"/>  },
@@ -27,7 +31,7 @@ const selectedShape = useShapes(shapeSelector);
 
 const updateAttr = useCallback((event) => {
     const attr = event.target.name;
-    updateAttribute(attr, parseInt(event.target.value));
+    updateAttribute(attr, parseFloat(event.target.value));
 
   
   }, []);
@@ -37,6 +41,21 @@ const updateAttr = useCallback((event) => {
     updateAttribute("texture", option.value);
   
   }, []);
+
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      console.log(attr)
+      console.log(value)
+      updateAttribute(attr,parseFloat(value));
+      
+    }
+  }
+
+  const updateEvent = (event) => {
+    const attr = event.target.name;
+    setAttr(attr)
+    setValue(event.target.value)
+  }
 
   const getTextureOptions = (type) => {
     switch(type){
@@ -64,8 +83,9 @@ const updateAttr = useCallback((event) => {
                 className="value"
                 name="x"
                 type="text"
-                value={selectedShape.x}
-                onChange={(event) => updateAttr(event, selectedShape.type)}
+                value={attr=="x"?value:selectedShape.x}
+                onKeyDown={handleKeyDown}
+                onChange={updateEvent}
                 />
               
             </div>
@@ -76,8 +96,9 @@ const updateAttr = useCallback((event) => {
                 className="value"
                 name="y"
                 type="text"
-                value={selectedShape.y}
-                onChange={updateAttr}
+                value={attr=="y"?value:selectedShape.y}
+                onChange={updateEvent}
+                onKeyDown={handleKeyDown}
                 />
               
             </div>
