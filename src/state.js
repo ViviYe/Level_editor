@@ -44,11 +44,11 @@ export const saveDiagram = () => {
   }
   for (const [_, value] of Object.entries(state.shapes)) {
 
-    if (value['x'].toFixed(2) > json_obj['level']['xBound']){
-      json_obj['level']['xBound'] = value['x'].toFixed(2)
+    if ( value['x'] && value['x'].toFixed(2) > json_obj['level']['xBound']){
+      json_obj['level']['xBound'] = value['x'].toFixed(2) * 1.0
     }
-    if (value['y'].toFixed(2) > json_obj['level']['yBound']){
-      json_obj['level']['yBound'] = value['y'].toFixed(2)
+    if (value['y'] && value['y'].toFixed(2) > json_obj['level']['yBound']){
+      json_obj['level']['yBound'] = value['y'].toFixed(2) * 1.0
     }
     switch(value['type']) {
       case SHAPE_TYPES.Shape1:
@@ -87,14 +87,13 @@ export const saveDiagram = () => {
       case SHAPE_TYPES.Shape4:
             var new_obj = {
               "type": 4,
-              "texture": "tile6",
+              "texture": value["texture"],
               "angle": -1.0 * value['rotation']/180.0 * 3.14,
               "posx": 1.0 * value['x'].toFixed(2),
               "posy": 1.0 * value['y'].toFixed(2),
             }
             json_obj['level']['tiles'].push(new_obj)
             break;
-
 
       case SHAPE_TYPES.Shape5:
               var new_obj = {
@@ -142,12 +141,25 @@ export const saveDiagram = () => {
                 }
                 json_obj['level']['energies'].push(new_obj)
                 break;
+
+      case SHAPE_TYPES.Sticky:
+                  var new_obj = {
+                    "angle":  -1.0 * value['rotation']/180.0 * 3.14,
+                    "posx": 1.0 * (value['x']).toFixed(2),
+                    "posy": 1.0 * (value['y']).toFixed(2),
+                    "height": 1.0 * (value['height']/40).toFixed(2),
+                    "width": 1.0 * (value['width']/40).toFixed(2),
+                  }
+                  
+                  json_obj['level']['sticky_walls'].push(new_obj)
+                  break;
       default:
           var new_obj = {}
     }
   }
 
-
+  json_obj['level']['xBound'] =  json_obj['level']['xBound'] + 0.5
+  json_obj['level']['yBound'] =  json_obj['level']['yBound'] + 0.5
   const json = JSON.stringify(json_obj)
   const fileName = "test";
   const blob = new Blob([json], { type: "application/json" });
@@ -209,52 +221,53 @@ export const createShape1 = ({ x, y, file="tile1", rotation=0}) => {
       });
   };
 
-  export const createShape3 = ({ x, y }) => {
+  export const createShape3 = ({ x, y, rotation=0  }) => {
     setState((state) => {
         state.shapes[nanoid()] = {
           type: SHAPE_TYPES.Shape3,
           width: 120,
           height: 120,
-          rotation: DEFAULTS.RECT.ROTATION,
+          rotation: rotation,
           x,
           y,
         };
       });
   };
 
-  export const createShape4 = ({ x, y }) => {
+  export const createShape4 = ({ x, y, rotation=0, file="tile6"  }) => {
     setState((state) => {
         state.shapes[nanoid()] = {
           type: SHAPE_TYPES.Shape4,
           width: 140,
           height: 140,
-          rotation: DEFAULTS.RECT.ROTATION,
+          rotation: rotation,
+          texture: file,
           x,
           y,
         };
       });
   };
 
-  export const createShape5 = ({ x, y }) => {
+  export const createShape5 = ({ x, y, rotation=0 }) => {
     setState((state) => {
         state.shapes[nanoid()] = {
           type: SHAPE_TYPES.Shape5,
           width: 20,
           height: 20,
-          rotation: 0,
+          rotation: rotation,
           x,
           y,
         };
       });
   };
   
-  export const createSticky = ({ x, y }) => {
+  export const createSticky = ({ x, y , rotation=0}) => {
     setState((state) => {
         state.shapes[nanoid()] = {
           type: SHAPE_TYPES.Sticky,
           width: 20,
           height: 50,
-          rotation: 0,
+          rotation: rotation,
           x,
           y,
         };
@@ -298,7 +311,7 @@ export const createEnergy = ({ x, y }) => {
   });
 };
 
-export const createLamp = ({ x, y }) => {
+export const createLamp = ({ x, y, rotation=0 }) => {
   setState((state) => {
     state.shapes[nanoid()] = {
       type: SHAPE_TYPES.LAMP,
@@ -306,7 +319,7 @@ export const createLamp = ({ x, y }) => {
       height: 40,
       x,
       y,
-      rotation: 0
+      rotation: rotation
     };
   });
 };
@@ -357,20 +370,42 @@ export const updateAttribute = (attr, value) => {
 export const addTiles = (json) =>{
   const tiles = json['level']['tiles']
   // console.log(tiles)
+  const lumia = json['level']['lumia']
+  createLumia({x:lumia['posx'], y:lumia['posy']})
+  const energies = json['level']['energies']
+  energies.forEach(element => {
+      createEnergy({x: element['posx'], y: element['posy']})
+  })
+  const enemies = json['level']['enemies']
+  enemies.forEach(element => {
+    createEnemy({x: element['posx'], y: element['posy']})
+  })
+  const plants = json['level']['plants']
+  plants.forEach(element => {
+    createLamp({x: element['posx'], y: element['posy'], rotation: (element['angle'] * -180)/3.14})
+  })
+
+  const sticky = json['level']['sticky_walls']
+  sticky.forEach(element => {
+    createSticky({x: element['posx'], y: element['posy'], rotation: (element['angle'] * -180)/3.14})
+  })
+  
   tiles.forEach(element => {
     switch(element['type']){
       case 1:
             createShape1({x: element['posx'], y: element['posy'], file: element['texture'], rotation: (element['angle'] * -180)/3.14})
         break
-            break
       case 3:
             createShape2({x: element['posx'], y: element['posy'], file: element['texture'], rotation: (element['angle'] * -180)/3.14})
             break
       case 2:
+            createShape3({x: element['posx'], y: element['posy'], file: element['texture'], rotation: (element['angle'] * -180)/3.14})
             break
       case 4:
+            createShape4({x: element['posx'], y: element['posy'], file: element['texture'], rotation: (element['angle'] * -180)/3.14})
             break
       case 5:
+            createShape5({x: element['posx'], y: element['posy'], file: element['texture'], rotation: (element['angle'] * -180)/3.14})
             break
     }
   });

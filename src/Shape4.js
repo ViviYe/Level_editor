@@ -4,6 +4,7 @@ import { Rect as KonvaRectangle, Transformer, Image } from "react-konva";
 import { LIMITS } from "./constants";
 import { selectShape, transformRectangleShape, moveShape } from "./state";
 import Shape41 from './assets/tile6.png'
+import Shape42 from './assets/tile9.png'
 
 const boundBoxCallbackForRectangle = (oldBox, newBox) => {
   // limit resize
@@ -22,6 +23,10 @@ export function Shape4({ id, isSelected, type, ...shapeProps }) {
   const shapeRef = useRef();
   const transformerRef = useRef();
   const [image, setImage] = useState(new window.Image());
+  const img1 = new window.Image()
+  img1.src = Shape41
+  const img2 = new window.Image()
+  img2.src = Shape42
 
   useEffect(() => {
     if (isSelected) {
@@ -59,10 +64,22 @@ export function Shape4({ id, isSelected, type, ...shapeProps }) {
     [id]
   );
 
+  const getImage = (texture) => {
+    switch(texture){
+      case ("tile6"):
+        return img1
+      case ("tile9"):
+        return img2
+      default:
+        return img1
+      
+    }
+  }
+
   return (
     <>
       <Image
-       image={image}
+       image={getImage(shapeProps.texture)}
        onClick={handleSelect}
        onTap={handleSelect}
        onDragStart={handleSelect}

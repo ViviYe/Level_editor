@@ -42,7 +42,6 @@ export function StickyWall({ id, isSelected, type, ...shapeProps }) {
   const handleSelect = useCallback(
     (event) => {
       event.cancelBubble = true;
-
       selectShape(id);
     },
     [id]
